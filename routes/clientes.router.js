@@ -1,12 +1,12 @@
 const express = require( 'express' );
 
 // ---- Propios ----
-const UsuariosServices = require( './../services/usuarios.services' );
-const validatorHandler = require( './../middlewares/validator.handler' );
-const { createUsuarioSchema, updateUsuarioSchema, getUsuarioSchema } = require( './../schemas/users.schemas' );
+const ClientesServices = require( '../services/clientes.services' );
+const validatorHandler = require( '../middlewares/validator.handler' );
+const { createClienteSchema, updateClienteSchema, getClieteSchema } = require( '../schemas/clientes.schemas' );
 
 const router = express.Router();
-const services = new UsuariosServices();
+const services = new ClientesServices();
 
 router.get(
     '/',
@@ -16,13 +16,9 @@ router.get(
     }
 );
 
-router.get( '/filtro', ( req, res ) => {
-    res.send( 'Estático' );
-} );
-
 router.get(
     '/:id',
-    validatorHandler( getUsuarioSchema, 'params' ),
+    validatorHandler( getClieteSchema, 'params' ),
     async ( req, res, next ) => {
         try {
             const { id } = req.params;
@@ -36,7 +32,7 @@ router.get(
 
 router.post(
     '/',
-    validatorHandler( createUsuarioSchema, 'body' ),
+    validatorHandler( createClienteSchema, 'body' ),
     async ( req, res, next ) => {
         try {
             const body = req.body;
@@ -50,8 +46,8 @@ router.post(
 
 router.put(
     '/:id',
-    validatorHandler( getUsuarioSchema, 'params' ),
-    validatorHandler( updateUsuarioSchema, 'body' ),
+    validatorHandler( getClieteSchema, 'params' ),
+    validatorHandler( updateClienteSchema, 'body' ),
     async ( req, res, next ) => {
         try {
             const { id } = req.params;
@@ -66,8 +62,8 @@ router.put(
 
 router.patch(
     '/:id',
-    validatorHandler( getUsuarioSchema, 'params' ),
-    validatorHandler( updateUsuarioSchema, 'body' ),
+    validatorHandler( getClieteSchema, 'params' ),
+    validatorHandler( updateClienteSchema, 'body' ),
     async ( req, res, next ) => {
         try {
             const { id } = req.params;
@@ -82,7 +78,7 @@ router.patch(
 
 router.delete(
     '/:id',
-    validatorHandler( getUsuarioSchema, 'params' ),
+    validatorHandler( getClieteSchema, 'params' ),
     async ( req, res, next ) => {
         try {
             const { id } = req.params;

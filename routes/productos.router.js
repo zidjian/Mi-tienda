@@ -1,18 +1,23 @@
 const express = require( 'express' );
 
 // ---- Propios ----
-const ProductsServices = require( './../services/products.services' );
+const ProductosServices = require( './../services/productos.services' );
 const validatorHandler = require( './../middlewares/validator.handler' );
-const { createProductSchema, updateProductSchema, getProductSchema } = require( './../schemas/product.schemas' );
+const { createProductoSchema, updateProductoSchema, getProductoSchema, paginacionProductosSchema } = require( './../schemas/productos.schemas' );
 
 const router = express.Router();
-const services = new ProductsServices();
+const services = new ProductosServices();
 
 router.get(
     '/',
-    async ( req, res ) => {
-        const productos = await services.find();
-        res.json( productos );
+    validatorHandler( paginacionProductosSchema, 'query' ),
+    async ( req, res, next ) => {
+        try {
+            const productos = await services.find( req.query );
+            res.json( productos );
+        } catch ( error ) {
+            next( error )
+        }
     }
 );
 
@@ -22,7 +27,7 @@ router.get( '/filtro', ( req, res ) => {
 
 router.get(
     '/:id',
-    validatorHandler( getProductSchema, 'params' ),
+    validatorHandler( getProductoSchema, 'params' ),
     async ( req, res, next ) => {
         try {
             const { id } = req.params;
@@ -36,7 +41,7 @@ router.get(
 
 router.post(
     '/',
-    validatorHandler( createProductSchema, 'body' ),
+    validatorHandler( createProductoSchema, 'body' ),
     async ( req, res, next ) => {
         const body = req.body;
         const nuevo_producto = await services.crear( body );
@@ -46,8 +51,8 @@ router.post(
 
 router.put(
     '/:id',
-    validatorHandler( getProductSchema, 'params' ),
-    validatorHandler( updateProductSchema, 'body' ),
+    validatorHandler( getProductoSchema, 'params' ),
+    validatorHandler( updateProductoSchema, 'body' ),
     async ( req, res ) => {
         const { id } = req.params;
         const body = req.body;
@@ -58,8 +63,8 @@ router.put(
 
 router.patch(
     '/:id',
-    validatorHandler( getProductSchema, 'params' ),
-    validatorHandler( updateProductSchema, 'body' ),
+    validatorHandler( getProductoSchema, 'params' ),
+    validatorHandler( updateProductoSchema, 'body' ),
     async ( req, res, next ) => {
         try {
             const { id } = req.params;

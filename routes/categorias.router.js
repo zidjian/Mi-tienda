@@ -1,12 +1,11 @@
 const express = require( 'express' );
 
-// ---- Propios ----
-const UsuariosServices = require( './../services/usuarios.services' );
+const CategoriasServices = require( './../services/categorias.services' );
 const validatorHandler = require( './../middlewares/validator.handler' );
-const { createUsuarioSchema, updateUsuarioSchema, getUsuarioSchema } = require( './../schemas/users.schemas' );
+const { createCategoriaSchema, updateCategoriaSchema, getCategoriaSchema } = require( './../schemas/categorias.schemas' );
 
 const router = express.Router();
-const services = new UsuariosServices();
+const services = new CategoriasServices();
 
 router.get(
     '/',
@@ -22,7 +21,7 @@ router.get( '/filtro', ( req, res ) => {
 
 router.get(
     '/:id',
-    validatorHandler( getUsuarioSchema, 'params' ),
+    validatorHandler( getCategoriaSchema, 'params' ),
     async ( req, res, next ) => {
         try {
             const { id } = req.params;
@@ -36,7 +35,7 @@ router.get(
 
 router.post(
     '/',
-    validatorHandler( createUsuarioSchema, 'body' ),
+    validatorHandler( createCategoriaSchema, 'body' ),
     async ( req, res, next ) => {
         try {
             const body = req.body;
@@ -50,8 +49,8 @@ router.post(
 
 router.put(
     '/:id',
-    validatorHandler( getUsuarioSchema, 'params' ),
-    validatorHandler( updateUsuarioSchema, 'body' ),
+    validatorHandler( getCategoriaSchema, 'params' ),
+    validatorHandler( updateCategoriaSchema, 'body' ),
     async ( req, res, next ) => {
         try {
             const { id } = req.params;
@@ -66,8 +65,8 @@ router.put(
 
 router.patch(
     '/:id',
-    validatorHandler( getUsuarioSchema, 'params' ),
-    validatorHandler( updateUsuarioSchema, 'body' ),
+    validatorHandler( getCategoriaSchema, 'params' ),
+    validatorHandler( updateCategoriaSchema, 'body' ),
     async ( req, res, next ) => {
         try {
             const { id } = req.params;
@@ -82,7 +81,7 @@ router.patch(
 
 router.delete(
     '/:id',
-    validatorHandler( getUsuarioSchema, 'params' ),
+    validatorHandler( getCategoriaSchema, 'params' ),
     async ( req, res, next ) => {
         try {
             const { id } = req.params;
