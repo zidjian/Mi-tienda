@@ -41,7 +41,7 @@ const paginacionProductosSchema = joi.object( {
     offset: offset,
     precio: precio,
     precio_min: precio_min,
-    precio_max: precio_max.when( 'precio_min', {
+    precio_max: joi.alternatives().conditional( 'precio_min', {
         is: joi.number().integer(),
         then: precio_max.required()
     } )
