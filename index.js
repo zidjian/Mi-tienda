@@ -1,6 +1,9 @@
 const express = require( 'express' );
 const cors = require( 'cors' );
 const routerApi = require( './routes' );
+
+const { checkApiKey } = require( './middlewares/auth.handler' );
+
 const app = express();
 
 const { errorHandler, logErrors, boomErrorHandler, ormErrorHandler } = require( './middlewares/error.handler' );
@@ -24,6 +27,16 @@ const options = {
 app.get( '/', ( req, res ) => {
     res.send( 'Mi server en express' );
 } );
+
+require( './utils/auth/index' ); // Ejecutamos las estrategias de de autenticación
+
+app.get(
+    '/nueva_ruta',
+    checkApiKey,
+    ( req, res ) => {
+        res.send( 'Nueva ruta' );
+    }
+);
 
 routerApi( app );
 app.use( logErrors );

@@ -1,4 +1,4 @@
-const faker = require( 'faker' );
+const bcrypt = require( 'bcrypt' );
 const boom = require( '@hapi/boom' );
 
 const { models } = require( './../libs/sequelize' );
@@ -9,9 +9,18 @@ class ClientesServices {
     }
 
     async crear( data ) {
-        const resultado = await models.Cliente.create( data, {
+        const hash = await bcrypt.hash( data.usuario.contrasenia, 10 ); // Convirtiendo la contraseña en un hash
+        const registro_modificado  = {
+            ...data, // El conteido que se sobreescribirá
+            usuario: { // Ingreso al apartado de usuario que se modificará
+                ...data.usuario, // El conteido que se sobreescribira
+                contrasenia: hash // Indico que lo que modificara sera la contraseña
+            }
+        };
+        const resultado = await models.Cliente.create( registro_modificado, {
             include: [ 'usuario' ]
         } );
+        delete resultado.usuario.dataValues.contrasenia;
         return resultado;
     }
 
